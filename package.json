@@ -1,5 +1,5 @@
 {
-  "name": "react-electron",
+  "name": "your-heart",
   "version": "0.1.0",
   "private": true,
   "main": "src/main.js",
@@ -14,6 +14,7 @@
     "socket.io-client": "^4.6.1",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

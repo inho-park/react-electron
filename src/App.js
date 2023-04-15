@@ -192,11 +192,11 @@ function App() {
       {/*</button>*/}
 
       { showHideButtons() }
-      <div>{ status }</div>
+      <div>{status}</div>
       <textarea ref={textRef}>
 
       </textarea>
-
+      <canvas id="canvas" width={1300} height={500}></canvas>
     </div>
   );
 }

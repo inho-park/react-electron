@@ -1,4 +1,4 @@
-import Rtc from './components/rtc';
+import Rtc from './components/Rtc.js';
 
 function App() {
 

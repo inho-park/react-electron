@@ -98,7 +98,13 @@ export default function Video(props) {
 
     return (
         <div>
-            <canvas id="canvas" width={1300} height={500}></canvas>
+            <video id="video" width="0" height="0"></video>
+            <canvas id="canvas" width="1300" height="480"></canvas>
+            
+            {/* <!-- 버튼 --> */}
+            <button id="btn_start">녹화시작</button>
+            <button id="btn_stop">녹화종료</button>
+            <video id="video_recorded"></video>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import {useRef, useEffect, useState} from "react";
 import io from "socket.io-client";
-import './App.css';
+import '../css/Video.css';
 
 const socket = io(
   // server 안에 있는 webRTCNamespace
@@ -196,7 +196,6 @@ export default function Rtc() {
       <textarea ref={textRef}>
 
       </textarea>
-      <canvas id="canvas" width={1300} height={500}></canvas>
     </div>
   );
 }

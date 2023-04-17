@@ -1,6 +1,7 @@
 import {useRef, useEffect, useState} from "react";
 import io from "socket.io-client";
 import '../css/Video.css';
+import WebcamCanvas from "./WebcamCanvas";
 
 const socket = io(
   // server 안에 있는 webRTCNamespace
@@ -182,7 +183,7 @@ export default function Rtc() {
         margin: 5,
         backgroundColor: "gray"
       }}></video>
-
+      
       <br/>
       {/*<button onClick={createOffer}>*/}
       {/*  Create Offer*/}
@@ -196,6 +197,11 @@ export default function Rtc() {
       <textarea ref={textRef}>
 
       </textarea>
+
+      <WebcamCanvas
+        localVideoRef = {localVideoRef}
+        remoteVideoRef = {remoteVideoRef}
+      />
     </div>
   );
 }

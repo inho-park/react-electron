@@ -1,19 +1,18 @@
-// 요소 가져오기
-const $canvas = document.querySelector("#canvas");
-const $video = document.querySelector("#video");
-const $btn_start = document.querySelector("#btn_start");
-const $btn_stop = document.querySelector("#btn_stop");
-const $video_recorded = document.querySelector("#video_recorded");
-const ctx = $canvas.getContext('2d');
 
-export default function Video(props) {
+export default function Video() {
+    // 요소 가져오기
+    const $canvas = document.querySelector("#canvas");
+    const $video = document.querySelector("#video");
+    const $btn_start = document.querySelector("#btn_start");
+    const $btn_stop = document.querySelector("#btn_stop");
+    const $video_recorded = document.querySelector("#video_recorded");
+    const ctx = $canvas.getContext('2d');
 
     // MediaRecorder(녹화기) 변수 선언
     let mediaRecorder = null;
     
     // 스트림 데이터를 담아둘 배열 생성
     const arrVideoData = [];
-    const arrAudioData = [];
     
     // "녹화시작" 버튼 이벤트 처리
     $btn_start.onclick = (event)=> {
@@ -68,13 +67,12 @@ export default function Video(props) {
     $btn_stop.onclick = (event)=>{
     
         // 녹화 중단!
-        mediaRecorder.stop(); 
-        audioRecorder.stop();
+        mediaRecorder.stop();
     }
     
     if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then( (stream) => { 
+        .then( (stream) => {
     
             //비디오에 스트림을 넣습니다.
             $video.srcObject = stream

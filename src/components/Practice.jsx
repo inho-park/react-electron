@@ -1,7 +1,6 @@
 import {useRef, useEffect, useState} from "react";
 import io from "socket.io-client";
 import '../css/Video.css';
-import WebcamCanvas from "./WebcamCanvas";
 
 const socket = io(
   // server 안에 있는 webRTCNamespace
@@ -28,6 +27,7 @@ export default function Rtc() {
   // const candidates = useRef([]);
   const [offerVisible, setOfferVisible] = useState(true);
   const [answerVisible, setAnswerVisible] = useState(false);
+  const [isRecorded, setIsRecorded] = useState(false);
   const [status, setStatus] = useState("Make a call new");
 
 
@@ -66,6 +66,10 @@ export default function Rtc() {
     navigator.mediaDevices.getUserMedia(constraints)
       .then(stream => {
         localVideoRef.current.srcObject = stream;
+        console.log(localVideoRef.current.srcObject);
+        console.log(localVideoRef.current);
+        // console.log(localVideoRef.current);
+
 
         // webcam 을 통해 stream 이 변화할 때마다 peer connection 에 추가
         stream.getTracks().forEach(track => {
@@ -154,6 +158,75 @@ export default function Rtc() {
   //   });
   // }
 
+  // blob 에 담을 데이터 저장하는 스트림 배열
+  const arrMediaData = [];
+  // 녹음 객체 변수
+  let mediaRecorder = null;
+  // 상담자와 내담자간의 차이를 둬야하는 함수
+  const startRecording = () => {
+    setIsRecorded(true);
+
+    const localVideoStream = localVideoRef.current.srcObject.getVideoTracks()[0];
+    console.log(localAudioStream);
+    const localAudioStream = localVideoRef.current.srcObject.getAudioTracks()[0];
+    console.log(localVideoStream);
+    const remoteAudioStream = remoteVideoRef.current.srcObject.getAudioTracks()[0];
+    console.log(remoteAudioStream);
+    const mediaStream = new MediaStream();
+    mediaStream.addTrack(localVideoStream);
+    mediaStream.addTrack(localAudioStream);
+    mediaStream.addTrack(remoteAudioStream);
+    mediaRecorder = new MediaRecorder(mediaStream);
+
+    // MediaRecorder.dataavailable 이벤트 처리
+    mediaRecorder.ondataavailable = (event)=>{
+      // 스트림 데이터(Blob)가 들어올 때마다 배열에 담아둔다
+      arrMediaData.push(event.data);
+    };
+
+    mediaRecorder.onstop = (event) => {
+      // 들어온 스트림 데이터들(Blob)을 통합한 Blob객체를 생성
+      const blob = new Blob(arrMediaData);
+
+      // BlobURL 생성: 통합한 스트림 데이터를 가르키는 임시 주소를 생성
+      const blobURL = window.URL.createObjectURL(blob);
+
+      // 다운로드 구현
+      const $anchor = document.createElement("a"); // 앵커 태그 생성
+      document.body.appendChild($anchor);
+      $anchor.style.display = "none";
+      $anchor.href = blobURL; // 다운로드 경로 설정
+      $anchor.download = "test.webm"; // 파일명 설정
+      $anchor.click(); // 앵커 클릭
+      
+      // 배열 초기화
+      arrMediaData.splice(0);
+    }
+    mediaRecorder.start();
+  }
+
+  // 녹화 중단
+  const stopRecording = () => {
+    setIsRecorded(false);
+    mediaRecorder.stop();
+  }
+
+  const recordingButton = () => {
+    if (isRecorded == true) {
+      return (
+        <div>
+          <button onClick={startRecording}>Stop</button>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <button onClick={stopRecording}>Recording</button>
+        </div>
+      )
+    }
+  }
+
   const showHideButtons = () => {
     if (offerVisible) {
       return (
@@ -162,12 +235,68 @@ export default function Rtc() {
         </div>
       )
     } else if (answerVisible) { return (
-        <div>
+      <div>
           <button onClick={createAnswer}>Answer</button>
         </div>
       )
     }
   }
+  
+  // ============================================================================================================
+  
+  // const [timer, setTimer] = useState(undefined);
+  
+  // const canvasRef = useRef(null);
+
+
+  // useEffect(() => {
+  //   localVideoRef = props.localVideoRef;
+  //   remoteVideoRef = props.remoteVideoRef;
+  // }, [localVideoRef, remoteVideoRef]);
+
+  // const drawToCanvas = () => {
+  //   try {
+  //     const ctx = canvasRef.current.getContext('2d');
+
+  //     // localVideoRef = props.localVideoRef;
+  //     console.log("localVideoRef : " + localVideoRef.current);
+  //     // remoteVideoRef = props.remoteVideoRef;
+  //     console.log("remoteVideoRef : " + remoteVideoRef.current);
+      
+  //     canvasRef.current.width = localVideoRef.current.videoWidth * 2 + 10;
+  //     canvasRef.current.height = localVideoRef.current.videoHeight;
+      
+  //     if (ctx && ctx !== null) {
+  //       console.log("first if");
+  //       if (localVideoRef.current) {
+  //         console.log(localVideoRef.current.srcObject);
+  //         // ctx.translate(canvasRef.current.width, 0);
+  //         // ctx.scale(-1, 1);
+  //         ctx.drawImage(localVideoRef.current, 0, 0, localVideoRef.current.width, localVideoRef.current.height);
+  //         // ctx.setTransform(1, 0, 0, 1, 0, 0);
+  //       } if (remoteVideoRef.current) {
+  //         console.log(remoteVideoRef.current.srcObject);
+  //         // ctx.translate(canvasRef.current.width, 0);
+  //         // ctx.scale(-1, 1);
+  //         ctx.drawImage(remoteVideoRef.current, 5 + localVideoRef.current.width, localVideoRef.current.height, remoteVideoRef.current.width, remoteVideoRef.current.height);
+  //         // ctx.setTransform(1, 0, 0, 1, 0, 0);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
+
+  // const startOrStop = () => {
+  //   if (!timer) {
+  //     const t = setInterval(() => drawToCanvas(), 33);
+  //     setTimer(t);
+  //   } else {
+  //     clearInterval(timer);
+  //     setTimer(undefined);
+  //   }
+  // }
+
 
   return (
     <div style={{ margin: 10 }}>
@@ -184,6 +313,7 @@ export default function Rtc() {
         backgroundColor: "gray"
       }}></video>
       
+      {recordingButton() }
       <br/>
       {/*<button onClick={createOffer}>*/}
       {/*  Create Offer*/}
@@ -198,10 +328,25 @@ export default function Rtc() {
 
       </textarea>
 
-      <WebcamCanvas
-        localVideoRef = {localVideoRef}
-        remoteVideoRef = {remoteVideoRef}
-      />
+{/* ==================================================================================================// */}
+        {/* <div>
+        <table>
+          <thead>
+            <tr>
+              <td>Canvas</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><canvas id="canvas" ref={canvasRef} style={{backgroundColor: "skyblue"}}/></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <button color="warning" onClick={() => drawToCanvas()}>Draw to Canvas </button>
+        <hr />
+        <button color="warning" onClick={() => startOrStop()}>{timer ? 'Stop' : 'Repeat (0.033s)'} </button>
+      </div > */}
     </div>
   );
 }

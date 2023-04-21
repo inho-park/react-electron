@@ -62,6 +62,8 @@ export default function Rtc() {
       video: true
     };
 
+    // peer connection 변수 생성
+    const _pc = new RTCPeerConnection(null);
 
     navigator.mediaDevices.getUserMedia(constraints)
       .then(stream => {
@@ -70,17 +72,15 @@ export default function Rtc() {
         console.log(localVideoRef.current);
         // console.log(localVideoRef.current);
 
-
+        
         // webcam 을 통해 stream 이 변화할 때마다 peer connection 에 추가
         stream.getTracks().forEach(track => {
           _pc.addTrack(track, stream);
         });
       }).catch(e => {
-      console.log("getUserMedia Error : ", e);
-    });
-
-    // peer connection 변수 생성
-    const _pc = new RTCPeerConnection(null);
+        console.log("getUserMedia Error : ", e);
+      });
+      
 
     _pc.onicecandidate = (e) => {
       if (e.candidate) {
@@ -100,7 +100,7 @@ export default function Rtc() {
     }
 
     pc.current = _pc;
-  }, []);
+  }, [localVideoRef, remoteVideoRef]);
 
   const sendToPeer = (eventType, payload) => {
     socket.emit(eventType, payload);

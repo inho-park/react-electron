@@ -1,5 +1,4 @@
 // import Rtc from './components/Rtc.js';
-<<<<<<< HEAD
 import { useState } from "react";
 import VideoRecorder from "./components/recording/VideoRecorder.jsx";
 import AudioRecorder from "./components/recording/AudioRecorder.jsx";
@@ -32,19 +31,3 @@ const App = () => {
   );
 }
 export default App;
-=======
-import Practice from "./components/Practice.jsx";
-import Video from "./components/Video.js";
-import WebcamCanvas from "./components/WebcamCanvas.js";
-
-export default function App() {
-
-  return (
-    <>
-      {/* <WebcamCanvas /> */}
-      <Practice />
-      {/* <Video /> */}
-    </>
-  );
-}
->>>>>>> c56abc7461ad8a64ac03dacaa992e3e72dfdd9f2

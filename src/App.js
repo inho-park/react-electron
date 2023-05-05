@@ -2,6 +2,7 @@
 import { useState } from "react";
 import VideoRecorder from "./components/recording/VideoRecorder.jsx";
 import AudioRecorder from "./components/recording/AudioRecorder.jsx";
+import emotion from "./emotion.json"
 
 // 이거 아마 browser 에서 child_process 를 사용하지 못하게 막는 듯
 // import { exec } from "child_process";
@@ -17,6 +18,17 @@ import AudioRecorder from "./components/recording/AudioRecorder.jsx";
 //     console.log("false");
 //   });
 // }
+
+const JsonData = () => {
+  console.log(emotion.Angry);
+  console.log(emotion.Disgusted);
+  console.log(emotion.Happy);
+  console.log(emotion.Fearful);
+  console.log(emotion.Neutral);
+  console.log(emotion.Sad);
+  console.log(emotion.Surprised);
+  
+};
 
 function App() {
   let [recordOption, setRecordOption] = useState("video");
@@ -45,7 +57,7 @@ function App() {
       </div>
 
       <div>
-        {/* <button onClick={onExecution} type="button">python exe</button> */}
+        <button onClick={JsonData} type="button">emotion</button>
       </div>
     </div>
   );

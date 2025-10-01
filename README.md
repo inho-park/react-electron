@@ -1,9 +1,4 @@
 # React 와 Electron 연결하기
-<<<<<<< HEAD
-## Electron 이란
-Electron 은 Chronium 
-=======
->>>>>>> c56abc7461ad8a64ac03dacaa992e3e72dfdd9f2
 
 ## settings
 ### 1. yarn add --dev electron 설치

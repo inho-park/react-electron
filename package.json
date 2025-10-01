@@ -4,28 +4,33 @@
   "private": true,
   "main": "src/main.js",
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "buffer": "^6.0.3",
     "child_process": "^1.0.2",
+    "crypto-browserify": "^3.12.1",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "python-shell": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
+    "stream-browserify": "^3.0.0",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://localhost:8080",
   "browser": {
     "child_process": false
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron": "electron ."
+    "react-start": "craco start",
+    "electron-start": "wait-on http://localhost:3000 && electron ./electron/main.js",
+    "start": "concurrently \"npm run react-start\" \"npm run electron-start\"",
+    "build": "craco build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +51,8 @@
     ]
   },
   "devDependencies": {
-    "electron": "^24.0.0"
+    "concurrently": "^9.2.1",
+    "electron": "^24.2.0",
+    "wait-on": "^9.0.1"
   }
 }

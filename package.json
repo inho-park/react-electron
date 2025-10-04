@@ -2,7 +2,7 @@
   "name": "your-heart",
   "version": "0.1.0",
   "private": true,
-  "main": "src/main.js",
+  "main": "electron/main.js",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",
